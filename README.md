@@ -9,9 +9,6 @@
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-EE4C2C?style=flat-square&logo=pytorch&logoColor=white)](https://pytorch.org/)
 [![YOLOv8](https://img.shields.io/badge/YOLOv8-Ultralytics-00FFFF?style=flat-square&logo=yolo&logoColor=black)](https://github.com/ultralytics/ultralytics)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
-[![Open Issues](https://img.shields.io/github/issues/beanvisionai/beanvisionai?style=flat-square)](https://github.com/beanvisionai/beanvisionai/issues)
-[![Stars](https://img.shields.io/github/stars/beanvisionai/beanvisionai?style=flat-square)](https://github.com/beanvisionai/beanvisionai/stargazers)
-[![Forks](https://img.shields.io/github/forks/beanvisionai/beanvisionai?style=flat-square)](https://github.com/beanvisionai/beanvisionai/network/members)
 [![Contributions Welcome](https://img.shields.io/badge/Contributions-Welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square)](https://github.com/psf/black)
  
