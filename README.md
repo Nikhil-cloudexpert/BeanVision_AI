@@ -12,10 +12,22 @@
 [![Contributions Welcome](https://img.shields.io/badge/Contributions-Welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg?style=flat-square)](https://github.com/psf/black)
  
-<br>
-**[📖 Documentation](#-table-of-contents)** • **[🚀 Quick Start](#-quick-start)** • **[🧠 Pipeline](#-ai-pipeline)** • **[📊 Benchmarks](#-model-performance)** • **[🤝 Contributing](#-contributing)** • **[📬 Contact](#-contact)**
- 
-<br>
+BeanVisionAI
+AI-Powered Coffee Bean Quality Assessment System
+
+
+
+
+
+
+
+
+
+An Open-Source Deep Learning Framework for Intelligent Coffee Bean Quality Assessment
+
+"Combining Computer Vision, Vision Transformers, and Deep Learning to automate coffee bean inspection."
+
+</div>
 > 🖼️ **Project Banner Placeholder** — `assets/banner.png`
 > *(A high-resolution banner showcasing coffee bean detection, segmentation masks, and the quality classification pipeline should be placed here.)*
  
