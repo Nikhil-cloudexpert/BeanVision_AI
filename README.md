@@ -27,11 +27,6 @@ An Open-Source Deep Learning Framework for Intelligent Coffee Bean Quality Asses
 
 "Combining Computer Vision, Vision Transformers, and Deep Learning to automate coffee bean inspection."
 
-</div>
-> 🖼️ **Project Banner Placeholder** — `assets/banner.png`
-> *(A high-resolution banner showcasing coffee bean detection, segmentation masks, and the quality classification pipeline should be placed here.)*
- 
-</div>
 ---
  
 ## 📚 Table of Contents
