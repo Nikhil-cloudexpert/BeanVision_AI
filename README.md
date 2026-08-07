@@ -1,168 +1,240 @@
-☕ BeanVisionAI
+# ☕ BeanVisionAI
 
 <div align="center">
 
-BeanVisionAI
-AI-Powered Coffee Bean Quality Assessment System
+# **BeanVisionAI**
 
+### **AI-Powered Coffee Bean Quality Assessment System**
 
+**YOLOv8 Segmentation • DINOv2 Feature Extraction • MLP Classification**
 
+![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge\&logo=python\&logoColor=white)
+![PyTorch](https://img.shields.io/badge/PyTorch-Deep%20Learning-EE4C2C?style=for-the-badge\&logo=pytorch\&logoColor=white)
+![YOLOv8](https://img.shields.io/badge/YOLOv8-Segmentation-7B68EE?style=for-the-badge)
+![DINOv2](https://img.shields.io/badge/DINOv2-Feature%20Extraction-FF6F00?style=for-the-badge)
+![OpenCV](https://img.shields.io/badge/OpenCV-Computer%20Vision-5C3EE8?style=for-the-badge\&logo=opencv\&logoColor=white)
+![ONNX](https://img.shields.io/badge/ONNX-Deployment-005CED?style=for-the-badge\&logo=onnx\&logoColor=white)
+![GitHub](https://img.shields.io/badge/GitHub-Version%20Control-181717?style=for-the-badge\&logo=github)
+![License](https://img.shields.io/badge/License-MIT-F5C518?style=for-the-badge)
 
+**An end-to-end computer vision and deep learning pipeline for detecting, segmenting, extracting, and classifying coffee beans.**
 
+<br>
 
-
-
-
-
-An intelligent computer vision pipeline for automated coffee bean segmentation, feature extraction, classification, and quality assessment.
+[🚀 Features](#-features) •
+[🧠 Architecture](#-ai-architecture) •
+[📊 Results](#-model-performance) •
+[⚙️ Installation](#️-installation) •
+[🛣️ Roadmap](#️-roadmap)
 
 </div>
 
-📖 Overview
+---
 
-BeanVisionAI is a deep learning-based coffee bean quality assessment system designed to automate the visual inspection and classification of coffee beans.
+# 📖 Overview
 
-Manual coffee bean inspection can be time-consuming and dependent on human expertise. BeanVisionAI addresses this challenge by combining instance segmentation, self-supervised visual feature extraction, and neural-network-based classification into a modular AI pipeline.
+**BeanVisionAI** is a research-oriented artificial intelligence system for automated **coffee bean quality assessment** using computer vision and deep learning.
 
-Instead of relying on a single model for the entire task, BeanVisionAI separates the problem into specialized stages:
+Coffee bean quality inspection is traditionally performed through manual visual examination. This process can be time-consuming, subjective, difficult to scale, and dependent on human expertise.
 
-YOLOv8 identifies and segments individual coffee beans.
-The segmentation masks are used to isolate individual beans from their background.
-DINOv2 extracts high-level visual representations from the isolated bean images.
-A custom Multi-Layer Perceptron (MLP) processes the extracted feature embeddings.
-The MLP predicts one of the 7 defined coffee bean classes.
-The resulting predictions can be used for automated quality analysis and reporting.
+BeanVisionAI approaches the problem as a **multi-stage computer vision pipeline** rather than relying on a single model.
 
-The project is designed as a research-oriented computer vision system with a modular architecture that can later be extended toward real-time inspection, edge AI, APIs, dashboards, and industrial automation.
+The system combines:
 
-🎯 Project Objectives
+* **YOLOv8 Instance Segmentation** for identifying and segmenting individual coffee beans.
+* **Mask-based bean extraction** for isolating each bean from the original image.
+* **DINOv2** for extracting rich visual representations from individual bean images.
+* **768-dimensional feature embeddings** generated from DINOv2.
+* A custom **Multi-Layer Perceptron (MLP)** for final 7-class classification.
+* Evaluation and visualization tools for analyzing model performance.
+* **ONNX export** for future cross-platform and edge deployment.
 
-BeanVisionAI aims to:
+The overall objective is to create a modular foundation that can eventually evolve into a **real-time intelligent coffee inspection and sorting system**.
 
-Automate coffee bean quality inspection.
-Segment individual coffee beans from images.
-Extract meaningful visual representations from segmented beans.
-Classify beans into predefined quality and defect categories.
-Reduce dependency on manual visual inspection.
-Provide a reproducible deep learning pipeline.
-Enable future deployment on resource-constrained edge devices.
-Create a foundation for intelligent coffee processing and sorting systems.
-✨ Features
-🔍 Computer Vision
-Coffee bean detection
-Instance segmentation
-Individual bean extraction
-Mask-based background removal
-Image preprocessing
-Prediction visualization
-🧠 Deep Learning
-YOLOv8 instance segmentation
-DINOv2 visual feature extraction
-768-dimensional feature embeddings
-Custom MLP classification
-Transfer learning / pretrained visual representations
-📊 Classification
+---
 
-BeanVisionAI currently supports 7 classes:
+# 🎯 Project Objectives
 
-cut
-good
-husk
-immature
-parchment
-partial-black
-shell
-⚙️ Engineering
-Modular training pipeline
-Separate feature extraction and classification stages
-Dataset preprocessing
-Model evaluation
-Model export using ONNX
-Reproducible experimentation
-🚀 Future Deployment
-REST API
-Web dashboard
-Docker containerization
-Real-time camera inference
-Edge AI deployment
-Industrial coffee sorting integration
-🧠 AI Architecture
+BeanVisionAI is designed around the following objectives:
 
-BeanVisionAI uses a multi-stage AI architecture instead of relying on a single classification model.
+* 🔍 Automatically identify individual coffee beans.
+* 🎭 Generate accurate instance segmentation masks.
+* 🫘 Extract individual beans from complex images.
+* 🧬 Generate meaningful visual embeddings using DINOv2.
+* 🧠 Classify coffee beans into seven predefined categories.
+* 📊 Evaluate segmentation and classification performance independently.
+* ⚡ Build a pipeline suitable for future real-time inference.
+* 🚀 Support portable model deployment using ONNX.
+* 🏭 Provide a foundation for future industrial coffee inspection and automated sorting.
 
-                    ☕ Coffee Bean Image
-                            │
-                            ▼
-                  Image Preprocessing
-                            │
-                            ▼
-               ┌────────────────────────┐
-               │ YOLOv8 Segmentation    │
-               │                        │
-               │ Detection + Masks      │
-               └────────────┬───────────┘
-                            │
-                            ▼
-                  Individual Bean Masks
-                            │
-                            ▼
-                   Bean Extraction
-                            │
-                            ▼
-                  Background Removal
-                            │
-                            ▼
-               ┌────────────────────────┐
-               │        DINOv2          │
-               │                        │
-               │ Visual Feature         │
-               │ Extraction             │
-               └────────────┬───────────┘
-                            │
-                            ▼
-                   768-D Feature Vector
-                            │
-                            ▼
-               ┌────────────────────────┐
-               │    MLP Classifier      │
-               │                        │
-               │ 768 → 512 → 256 → 7   │
-               └────────────┬───────────┘
-                            │
-                            ▼
-                    7-Class Prediction
-                            │
-                            ▼
-                  Quality Assessment
-                            │
-                            ▼
-                    Final AI Report
-🔬 Model Components
-1. YOLOv8 Instance Segmentation
+---
 
-YOLOv8 is used as the segmentation stage of BeanVisionAI.
+# ✨ Features
 
-Its primary responsibility is to identify individual coffee beans and generate segmentation masks around them.
+## 🔍 Computer Vision
 
-Responsibilities
-Detect individual beans
-Locate beans within an image
-Generate instance masks
-Separate overlapping beans
-Provide bean-level regions for downstream processing
+* Coffee bean detection
+* Instance segmentation
+* Individual bean mask generation
+* Bean extraction
+* Background removal
+* Image preprocessing
+* Prediction visualization
 
-The resulting masks are then used to isolate individual beans before feature extraction.
+## 🧠 Deep Learning
 
-2. Individual Bean Extraction
+* YOLOv8 segmentation
+* DINOv2 visual feature extraction
+* 768-dimensional feature embeddings
+* Custom MLP classifier
+* Transfer learning through pretrained visual representations
 
-After YOLOv8 generates the segmentation masks, BeanVisionAI extracts individual bean regions from the original image.
+## 🏷️ Classification
 
-The extraction stage allows the subsequent feature extractor to focus on the bean itself rather than unnecessary background information.
+BeanVisionAI currently supports **exactly 7 classes**:
 
+|  ID | Class           |
+| --: | --------------- |
+| `0` | `cut`           |
+| `1` | `good`          |
+| `2` | `husk`          |
+| `3` | `immature`      |
+| `4` | `parchment`     |
+| `5` | `partial-black` |
+| `6` | `shell`         |
+
+## ⚙️ Engineering
+
+* Modular architecture
+* Separate segmentation and classification stages
+* Feature caching
+* Training and validation pipelines
+* Evaluation tools
+* Visualization utilities
+* ONNX model export
+* Git-based version control
+
+## 🚀 Future Deployment
+
+* Real-time camera inference
+* FastAPI backend
+* Streamlit dashboard
+* Docker deployment
+* Cloud integration
+* Edge AI
+* Industrial conveyor inspection
+* Automated sorting
+
+---
+
+# 🧠 AI Architecture
+
+BeanVisionAI follows a **segmentation → feature extraction → classification** architecture.
+
+```text
+                         ☕ COFFEE BEAN IMAGE
+                                  │
+                                  ▼
+                       ┌─────────────────────┐
+                       │ Image Preprocessing │
+                       └──────────┬──────────┘
+                                  │
+                                  ▼
+                 ┌──────────────────────────────┐
+                 │     YOLOv8 Segmentation      │
+                 │                              │
+                 │ Detection + Instance Masks  │
+                 └──────────────┬───────────────┘
+                                │
+                                ▼
+                     ┌─────────────────────┐
+                     │ Individual Bean     │
+                     │ Extraction          │
+                     └──────────┬──────────┘
+                                │
+                                ▼
+                     ┌─────────────────────┐
+                     │ Background Removal  │
+                     │ / Mask Processing   │
+                     └──────────┬──────────┘
+                                │
+                                ▼
+                 ┌──────────────────────────────┐
+                 │            DINOv2            │
+                 │                              │
+                 │  Visual Feature Extraction  │
+                 └──────────────┬───────────────┘
+                                │
+                                ▼
+                     ┌─────────────────────┐
+                     │ 768-D Feature      │
+                     │ Embedding           │
+                     └──────────┬──────────┘
+                                │
+                                ▼
+                 ┌──────────────────────────────┐
+                 │       MLP Classifier         │
+                 │                              │
+                 │       768 → 512 → 256 → 7  │
+                 └──────────────┬───────────────┘
+                                │
+                                ▼
+                     ┌─────────────────────┐
+                     │ 7-Class Prediction  │
+                     └──────────┬──────────┘
+                                │
+                                ▼
+                     ┌─────────────────────┐
+                     │ Quality Assessment  │
+                     └──────────┬──────────┘
+                                │
+                                ▼
+                         📊 FINAL REPORT
+```
+
+---
+
+# 🔬 Core AI Components
+
+## 1. YOLOv8 Instance Segmentation
+
+YOLOv8 forms the **first major stage** of the BeanVisionAI pipeline.
+
+Instead of directly sending the entire coffee bean image to a classifier, YOLOv8 identifies individual bean instances and generates segmentation masks.
+
+### YOLOv8 responsibilities
+
+* Detect individual beans
+* Localize each bean
+* Generate instance masks
+* Separate individual beans
+* Provide regions for downstream processing
+
+### Output
+
+For each detected bean, the segmentation model can provide:
+
+```text
+Bean Instance
+├── Bounding Box
+├── Segmentation Mask
+├── Class Information
+└── Confidence
+```
+
+These masks are subsequently used to isolate the beans before DINOv2 feature extraction.
+
+---
+
+# 🫘 2. Individual Bean Extraction
+
+After segmentation, BeanVisionAI extracts each individual bean from the original image.
+
+```text
 Original Image
       │
       ▼
-YOLOv8 Mask
+YOLOv8 Segmentation Mask
       │
       ▼
 Mask Application
@@ -172,108 +244,128 @@ Background Removal
       │
       ▼
 Individual Bean Image
+```
 
-This creates a cleaner input for DINOv2.
+This stage is important because the feature extractor should focus primarily on the visual characteristics of the coffee bean rather than irrelevant background information.
 
-🧬 DINOv2 Feature Extraction
+The resulting images are used as input to DINOv2.
 
-DINOv2 is used as the visual feature extraction component of BeanVisionAI.
+---
 
-Rather than directly training a classifier on raw images, the system uses DINOv2 to transform each isolated bean image into a high-dimensional visual representation.
+# 🧬 3. DINOv2 Feature Extraction
 
-The extracted representation captures visual characteristics that can be useful for distinguishing different coffee bean categories.
+**DINOv2** is used as the feature extraction stage of BeanVisionAI.
 
-Feature Extraction Pipeline
-Individual Bean Image
-          │
-          ▼
-      DINOv2
-          │
-          ▼
+Rather than training a classifier directly from raw pixel data, BeanVisionAI uses DINOv2 to transform each isolated bean into a high-dimensional visual representation.
+
+The resulting embedding contains learned visual information that can be used by the downstream classifier.
+
+### Feature pipeline
+
+```text
+Individual Bean
+      │
+      ▼
+Image Preprocessing
+      │
+      ▼
+DINOv2
+      │
+      ▼
 Visual Representation
-          │
-          ▼
+      │
+      ▼
 768-Dimensional Feature Vector
-          │
-          ▼
-Stored Feature Dataset
+      │
+      ▼
+Feature Dataset
+```
 
-These extracted features are subsequently used to train the MLP classifier.
+### Why DINOv2?
 
-Why DINOv2?
+DINOv2 can provide rich visual representations useful for capturing characteristics such as:
 
-Using a pretrained visual representation model provides a feature extraction stage that can capture complex visual information such as:
+* Shape
+* Texture
+* Surface patterns
+* Color distribution
+* Structural appearance
+* Visual differences between classes
 
-Shape
-Texture
-Surface appearance
-Color patterns
-Structural characteristics
-Visual differences between bean categories
+In BeanVisionAI, **DINOv2 is the feature extractor — not the final classifier.**
 
-DINOv2 therefore acts as the feature extractor, not the final classifier.
+---
 
-🧠 MLP Classification
+# 🧠 4. MLP Classification
 
-The extracted DINOv2 feature vectors are passed to a custom Multi-Layer Perceptron (MLP) classifier.
+The feature vectors generated by DINOv2 are passed to a custom **Multi-Layer Perceptron (MLP)**.
 
-The current conceptual architecture is:
+The current architecture is based around:
 
-DINOv2 Feature Vector
-        │
-        ▼
-      768
-        │
-        ▼
-      512
-        │
-        ▼
-   Batch Normalization
-        │
-        ▼
-       ReLU
-        │
-        ▼
-      Dropout
-        │
-        ▼
-      256
-        │
-        ▼
-   Batch Normalization
-        │
-        ▼
-       ReLU
-        │
-        ▼
-      Dropout
-        │
-        ▼
-       7 Classes
-Classification Output
+```text
+768 → 512 → 256 → 7
+```
 
-The MLP produces predictions for exactly 7 classes.
+with regularization and nonlinear activation layers.
 
-0 → cut
-1 → good
-2 → husk
-3 → immature
-4 → parchment
-5 → partial-black
-6 → shell
-🏷️ Dataset Classes
+```text
+             DINOv2 Embedding
+                    │
+                    ▼
+                 768-D
+                    │
+                    ▼
+               Linear 512
+                    │
+                    ▼
+            Batch Normalization
+                    │
+                    ▼
+                  ReLU
+                    │
+                    ▼
+                Dropout
+                    │
+                    ▼
+               Linear 256
+                    │
+                    ▼
+            Batch Normalization
+                    │
+                    ▼
+                  ReLU
+                    │
+                    ▼
+                Dropout
+                    │
+                    ▼
+                Linear 7
+                    │
+                    ▼
+             Class Prediction
+```
 
-BeanVisionAI uses 7 coffee bean classes.
+The MLP produces a prediction across the seven BeanVisionAI classes.
 
-Class ID	Class Name
-0	cut
-1	good
-2	husk
-3	immature
-4	parchment
-5	partial-black
-6	shell
-Class Mapping
+---
+
+# 🏷️ Supported Classes
+
+BeanVisionAI currently uses **exactly seven classes**.
+
+| Class ID | Class Name      | Category |
+| -------: | --------------- | -------- |
+|      `0` | `cut`           | Defect   |
+|      `1` | `good`          | Quality  |
+|      `2` | `husk`          | Defect   |
+|      `3` | `immature`      | Defect   |
+|      `4` | `parchment`     | Defect   |
+|      `5` | `partial-black` | Defect   |
+|      `6` | `shell`         | Defect   |
+
+### Python Class Mapping
+
+```python
 CLASS_NAMES = {
     0: "cut",
     1: "good",
@@ -283,30 +375,38 @@ CLASS_NAMES = {
     5: "partial-black",
     6: "shell"
 }
+```
 
-Important: These are the official seven classes used by the BeanVisionAI classification pipeline. No additional classes such as broken, black, or other are part of the current 7-class classification setup.
+> **Important:** The BeanVisionAI classification pipeline contains only these seven classes. Classes such as `broken`, `black`, `full-black`, or `other` are **not additional BeanVisionAI classes**.
 
-📂 Dataset Organization
+---
 
-The dataset is organized into separate subsets for model development and evaluation.
+# 📊 Technology Stack
 
-Dataset/
-│
-├── train/
-│   ├── images/
-│   └── labels/
-│
-├── valid/
-│   ├── images/
-│   └── labels/
-│
-└── test/
-    ├── images/
-    └── labels/
+| Layer               | Technology           | Role                                 |
+| ------------------- | -------------------- | ------------------------------------ |
+| Programming         | **Python**           | Core development                     |
+| Deep Learning       | **PyTorch**          | Training and inference               |
+| Segmentation        | **YOLOv8**           | Bean instance segmentation           |
+| Feature Extraction  | **DINOv2**           | Visual feature representation        |
+| Classification      | **MLP**              | 7-class classification               |
+| Computer Vision     | **OpenCV**           | Image processing                     |
+| Numerical Computing | **NumPy**            | Array and feature operations         |
+| Data Analysis       | **Pandas**           | Dataset and experiment analysis      |
+| Visualization       | **Matplotlib**       | Graphs and result visualization      |
+| Evaluation          | **scikit-learn**     | Classification metrics               |
+| Annotation          | **Roboflow**         | Dataset preparation                  |
+| Experimentation     | **Jupyter Notebook** | Research workflow                    |
+| GPU Environment     | **Google Colab**     | Model training and experimentation   |
+| Model Export        | **ONNX**             | Portable inference                   |
+| Version Control     | **Git**              | Source control                       |
+| Repository          | **GitHub**           | Collaboration and project management |
 
-The project can use annotated images for the YOLOv8 segmentation stage and subsequently generate isolated bean samples for DINOv2 feature extraction.
+---
 
-🏗️ Project Structure
+# 🗂️ Project Structure
+
+```text
 BeanVisionAI/
 │
 ├── .github/
@@ -343,9 +443,9 @@ BeanVisionAI/
 │
 ├── notebooks/
 │   ├── 01_data_preparation.ipynb
-│   ├── 02_yolov8_training.ipynb
-│   ├── 03_dinov2_features.ipynb
-│   ├── 04_mlp_training.ipynb
+│   ├── 02_yolov8_segmentation.ipynb
+│   ├── 03_dinov2_feature_extraction.ipynb
+│   ├── 04_mlp_classification.ipynb
 │   └── 05_deployment.ipynb
 │
 ├── outputs/
@@ -375,149 +475,243 @@ BeanVisionAI/
 ├── CONTRIBUTING.md
 ├── CODE_OF_CONDUCT.md
 └── README.md
-🚀 Tech Stack
-Category	Technology	Purpose
-Programming	Python	Core development
-Deep Learning	PyTorch	Model development and training
-Segmentation	YOLOv8	Coffee bean instance segmentation
-Feature Extraction	DINOv2	Visual feature representation
-Classification	MLP	7-class bean classification
-Computer Vision	OpenCV	Image processing and visualization
-Numerical Computing	NumPy	Feature and array operations
-Data Analysis	Pandas	Dataset and experiment analysis
-Visualization	Matplotlib	Graphs and result visualization
-ML Evaluation	scikit-learn	Classification metrics and evaluation
-Annotation	Roboflow	Dataset annotation and preparation
-Experimentation	Jupyter Notebook	Research and experimentation
-GPU Training	Google Colab	Model training and experimentation
-Model Export	ONNX	Portable model deployment
-Version Control	Git	Source control
-Repository	GitHub	Collaboration and project management
-⚙️ Installation
-1. Clone the Repository
-git clone https://github.com/yourusername/BeanVisionAI.git
+```
 
-Move into the project directory:
+---
 
+# 📂 Dataset
+
+The dataset is organized into training, validation, and testing subsets.
+
+```text
+dataset/
+│
+├── train/
+│   ├── images/
+│   └── labels/
+│
+├── valid/
+│   ├── images/
+│   └── labels/
+│
+└── test/
+    ├── images/
+    └── labels/
+```
+
+The dataset supports the seven BeanVisionAI classes:
+
+```text
+0 → cut
+1 → good
+2 → husk
+3 → immature
+4 → parchment
+5 → partial-black
+6 → shell
+```
+
+---
+
+# 🔄 Data Processing Pipeline
+
+The complete data preparation process is:
+
+```text
+Raw Coffee Bean Images
+          │
+          ▼
+       Annotation
+          │
+          ▼
+    Dataset Validation
+          │
+          ▼
+      Preprocessing
+          │
+          ▼
+YOLOv8 Segmentation Dataset
+          │
+          ▼
+   Individual Bean Masks
+          │
+          ▼
+    Bean Extraction
+          │
+          ▼
+   DINOv2 Processing
+          │
+          ▼
+  768-D Feature Dataset
+          │
+          ▼
+    MLP Classification
+```
+
+---
+
+# ⚙️ Installation
+
+## 1. Clone the Repository
+
+```bash
+git clone https://github.com/YOUR_USERNAME/BeanVisionAI.git
 cd BeanVisionAI
-2. Create a Virtual Environment
-Windows
+```
+
+Replace `YOUR_USERNAME` with your GitHub username.
+
+---
+
+## 2. Create a Virtual Environment
+
+### Windows
+
+```bash
 python -m venv venv
 venv\Scripts\activate
-Linux / macOS
+```
+
+### Linux / macOS
+
+```bash
 python3 -m venv venv
 source venv/bin/activate
-3. Install Dependencies
+```
+
+---
+
+## 3. Install Dependencies
+
+```bash
 pip install -r requirements.txt
+```
 
-If you're using a CUDA-enabled environment, install the appropriate PyTorch version for your GPU environment.
+For GPU training, install the PyTorch version appropriate for your CUDA environment.
 
-🧪 Development Environment
+---
 
-BeanVisionAI can be developed and trained using:
+# 🧪 Recommended Environment
 
-Local Python environments
-Jupyter Notebook
-Google Colab
-CUDA-enabled GPUs
+BeanVisionAI can be used in:
 
-For large-scale model training and feature extraction, GPU acceleration is recommended.
+* 🖥️ Local Python environments
+* 📓 Jupyter Notebook
+* ☁️ Google Colab
+* 🎮 CUDA-enabled GPU environments
 
-🏋️ YOLOv8 Training
+GPU acceleration is recommended for:
 
-The first stage of the pipeline is training the YOLOv8 segmentation model.
+* YOLOv8 training
+* DINOv2 feature extraction
+* MLP experimentation
+
+---
+
+# 🏋️ Training Pipeline
+
+BeanVisionAI separates the training workflow into multiple stages.
+
+## Stage 1 — YOLOv8 Segmentation
+
+Train the segmentation model using the annotated dataset.
 
 Example:
 
+```bash
 yolo task=segment mode=train \
 model=yolov8n-seg.pt \
 data=data.yaml \
 epochs=100 \
 imgsz=640 \
 batch=16
+```
 
-The trained model can then be used to generate segmentation masks for individual coffee beans.
+The trained model is then used to generate bean segmentation masks.
 
-🧬 DINOv2 Feature Extraction
+---
 
-Once segmentation is complete, individual bean images can be passed to DINOv2.
+# 🫘 Stage 2 — Bean Extraction
 
-The feature extraction process is:
+The segmentation model processes images and generates individual bean masks.
 
-Segmented Bean
-      │
-      ▼
-Preprocessing
-      │
-      ▼
+The masks are used to create isolated bean images.
+
+```text
+Input Image
+     │
+     ▼
+YOLOv8
+     │
+     ▼
+Instance Masks
+     │
+     ▼
+Mask Processing
+     │
+     ▼
+Individual Bean Images
+```
+
+---
+
+# 🧬 Stage 3 — DINOv2 Feature Extraction
+
+The isolated bean images are processed using DINOv2.
+
+```text
+Bean Image
+     │
+     ▼
 DINOv2
-      │
-      ▼
-Feature Embedding
-      │
-      ▼
-768-D Vector
-      │
-      ▼
-Saved Feature Dataset
+     │
+     ▼
+768-D Embedding
+     │
+     ▼
+Save Feature
+```
 
-Features can be stored for subsequent MLP training.
+Features can be stored for:
 
-Example output structure:
-
+```text
 DINO_Features/
 │
 ├── train/
 ├── valid/
 └── test/
-🧠 MLP Training
+```
 
-The extracted DINOv2 embeddings are used as input to the MLP classifier.
+This allows the MLP training stage to operate on precomputed feature embeddings instead of repeatedly processing images through DINOv2.
 
-Input
-768 Features
-     │
-     ▼
-Dense Layer
-512
-     │
-     ▼
-BatchNorm + ReLU + Dropout
-     │
-     ▼
-Dense Layer
-256
-     │
-     ▼
-BatchNorm + ReLU + Dropout
-     │
-     ▼
-Output Layer
-7 Classes
+---
 
-The classifier predicts:
+# 🧠 Stage 4 — MLP Training
 
-cut
-good
-husk
-immature
-parchment
-partial-black
-shell
-🔍 Inference
+The MLP receives the DINOv2 feature vectors.
 
-BeanVisionAI supports image-based inference.
+```text
+Input: 768-D
+      │
+      ▼
+512 Neurons
+      │
+      ▼
+256 Neurons
+      │
+      ▼
+7 Output Classes
+```
 
-Example:
+The classifier learns to distinguish the seven BeanVisionAI categories.
 
-python inference.py --source image.jpg
+---
 
-For a complete folder:
+# 🔍 Inference
 
-python inference.py --source test_images/
+The complete inference pipeline is:
 
-The inference pipeline performs:
-
+```text
 Input Image
      │
      ▼
@@ -530,425 +724,607 @@ Bean Extraction
 DINOv2 Feature Extraction
      │
      ▼
-MLP Classification
+768-D Feature Vector
+     │
+     ▼
+MLP Classifier
      │
      ▼
 Class Prediction
-📊 Evaluation
+```
 
-BeanVisionAI evaluates the segmentation and classification stages independently.
+Example:
 
-Segmentation Metrics
+```bash
+python inference.py --source image.jpg
+```
 
-The YOLOv8 segmentation stage can be evaluated using:
+Folder inference:
 
-Precision
-Recall
-mAP@50
-mAP@50–95
-IoU
-Classification Metrics
+```bash
+python inference.py --source test_images/
+```
 
-The MLP classifier can be evaluated using:
+---
 
-Accuracy
-Precision
-Recall
-F1 Score
-Confusion Matrix
-Per-class performance
-📈 Model Performance
+# 📈 Model Performance
 
-Performance values should be reported using results from the final validated experiments.
+## YOLOv8 Segmentation
 
-Model Component	Metric	Value
-YOLOv8 Segmentation	Precision	TBD
-YOLOv8 Segmentation	Recall	TBD
-YOLOv8 Segmentation	mAP@50	TBD
-YOLOv8 Segmentation	mAP@50–95	TBD
-MLP Classification	Accuracy	TBD
-MLP Classification	Macro F1	TBD
+The current reported YOLOv8 experiment achieved the following metrics:
 
-Note: Benchmark values should only be added after the corresponding experiment has been finalized and reproduced.
+| Metric    |     Result |
+| --------- | ---------: |
+| Precision | **97.59%** |
+| Recall    | **89.27%** |
+| mAP@50    | **94.87%** |
+| mAP@50–95 | **92.62%** |
 
-🖼️ Example Prediction
+These values represent the reported segmentation experiment and should be treated separately from the final DINOv2 + MLP classification results.
 
-A typical prediction can be represented as:
+## DINOv2 + MLP
 
-Input Image
-      │
-      ▼
-YOLOv8 detects individual beans
-      │
-      ▼
-Bean 1 → Segmented
-Bean 2 → Segmented
-Bean 3 → Segmented
-Bean 4 → Segmented
-      │
-      ▼
-DINOv2 extracts features
-      │
-      ▼
-MLP classification
-      │
-      ▼
+| Metric    |  Result |
+| --------- | ------: |
+| Accuracy  | **TBD** |
+| Precision | **TBD** |
+| Recall    | **TBD** |
+| F1 Score  | **TBD** |
+| Macro F1  | **TBD** |
 
-Bean 1 → good
-Bean 2 → cut
-Bean 3 → husk
-Bean 4 → partial-black
-📷 Visual Results
+> Classification benchmark values should be added after the final MLP experiment has been evaluated on the designated test set.
 
-Add project screenshots and prediction examples here.
+---
 
-Recommended structure:
+# 📊 Evaluation Metrics
 
+## YOLOv8 Segmentation
+
+BeanVisionAI evaluates segmentation using:
+
+* Precision
+* Recall
+* mAP@50
+* mAP@50–95
+* IoU
+
+## MLP Classification
+
+The classification stage can be evaluated using:
+
+* Accuracy
+* Precision
+* Recall
+* F1 Score
+* Macro F1
+* Weighted F1
+* Confusion Matrix
+* Per-class accuracy
+
+---
+
+# 📉 Confusion Matrix
+
+A confusion matrix can be used to analyze which of the seven classes are most frequently confused.
+
+Expected labels:
+
+```text
+cut
+good
+husk
+immature
+parchment
+partial-black
+shell
+```
+
+Recommended visualization:
+
+```text
+                 Predicted
+             ─────────────────
+             cut good husk ...
+Actual cut
+       good
+       husk
+       ...
+```
+
+Add the final confusion matrix under:
+
+```text
+assets/images/confusion_matrix.png
+```
+
+---
+
+# 🖼️ Example Results
+
+Store project visuals inside:
+
+```text
 assets/
 └── images/
-    ├── input_example.png
-    ├── segmentation_result.png
+    ├── original_input.png
+    ├── yolov8_segmentation.png
     ├── extracted_beans.png
+    ├── dinov2_features.png
     ├── classification_result.png
     └── confusion_matrix.png
+```
+
+Then display them in the README:
+
+```markdown
+![YOLOv8 Segmentation](assets/images/yolov8_segmentation.png)
+
+![Bean Extraction](assets/images/extracted_beans.png)
+
+![Classification Result](assets/images/classification_result.png)
+```
+
+---
+
+# 🧪 Example Output
+
+A complete inference session can conceptually produce:
+
+```text
+================================================
+              BeanVisionAI
+        Coffee Bean Quality Analysis
+================================================
+
+Input Image:
+coffee_sample_01.jpg
+
+Beans Detected:
+24
+
+------------------------------------------------
+Bean Classification
+------------------------------------------------
+
+Bean 01 → good
+Bean 02 → cut
+Bean 03 → good
+Bean 04 → husk
+Bean 05 → partial-black
+Bean 06 → good
+...
+
+------------------------------------------------
+Quality Summary
+------------------------------------------------
+
+Total Beans       : 24
+Good              : XX
+Cut               : XX
+Husk              : XX
+Immature          : XX
+Parchment         : XX
+Partial-Black     : XX
+Shell             : XX
+
+================================================
+```
+
+The exact values should be generated from the actual inference output rather than hard-coded.
+
+---
+
+# 📦 Model Export
+
+BeanVisionAI supports model export for future deployment.
+
+ONNX can provide a portable representation that can be integrated into different inference environments.
 
 Example:
 
-![YOLOv8 Segmentation](assets/images/segmentation_result.png)
-🔄 Complete Workflow
-┌───────────────────────┐
-│   Coffee Bean Image   │
-└───────────┬───────────┘
-            │
-            ▼
-┌───────────────────────┐
-│   Preprocessing       │
-└───────────┬───────────┘
-            │
-            ▼
-┌───────────────────────┐
-│ YOLOv8 Segmentation   │
-└───────────┬───────────┘
-            │
-            ▼
-┌───────────────────────┐
-│ Individual Bean       │
-│ Extraction            │
-└───────────┬───────────┘
-            │
-            ▼
-┌───────────────────────┐
-│ Background Removal    │
-└───────────┬───────────┘
-            │
-            ▼
-┌───────────────────────┐
-│ DINOv2 Feature        │
-│ Extraction            │
-└───────────┬───────────┘
-            │
-            ▼
-┌───────────────────────┐
-│ 768-D Feature Vector  │
-└───────────┬───────────┘
-            │
-            ▼
-┌───────────────────────┐
-│ MLP Classifier        │
-│ 768 → 512 → 256 → 7  │
-└───────────┬───────────┘
-            │
-            ▼
-┌───────────────────────┐
-│ Bean Class Prediction │
-└───────────┬───────────┘
-            │
-            ▼
-┌───────────────────────┐
-│ Quality Assessment    │
-└───────────────────────┘
-📦 Model Export
-
-BeanVisionAI supports exporting trained models to portable formats such as ONNX.
-
-ONNX export can help facilitate:
-
-Cross-platform inference
-Edge deployment
-Runtime optimization
-Integration with different inference environments
-
-Example:
-
+```python
 model.export(format="onnx")
-🚀 Deployment Roadmap
+```
 
-The architecture is designed to support future deployment beyond notebooks.
+Potential deployment targets include:
 
-Research Prototype
-        │
-        ▼
-Local Inference
-        │
-        ▼
-ONNX Export
-        │
-        ▼
-API Layer
-        │
-        ▼
-Web Dashboard
-        │
-        ▼
-Docker Deployment
-        │
-        ▼
-Edge AI
-        │
-        ▼
-Industrial Inspection
-🎯 Roadmap
-Phase 1 — Dataset & Infrastructure
+* Desktop inference
+* Server environments
+* Docker containers
+* Edge devices
+* Embedded AI systems
 
-Repository initialization
+---
 
-Project structure
+# 🚀 Deployment Architecture
 
-Dataset preparation
+The long-term deployment architecture is envisioned as:
 
-Seven-class definition
+```text
+                    ☕ Coffee Beans
+                          │
+                          ▼
+                   📷 Camera Input
+                          │
+                          ▼
+                 YOLOv8 Segmentation
+                          │
+                          ▼
+                   Bean Extraction
+                          │
+                          ▼
+                       DINOv2
+                          │
+                          ▼
+                     MLP Model
+                          │
+                          ▼
+                  Quality Prediction
+                          │
+              ┌───────────┴───────────┐
+              ▼                       ▼
+       📊 Web Dashboard          ⚙️ Industrial
+              │                       │
+              ▼                       ▼
+          Analytics             Sorting System
+```
 
-Dataset expansion
+---
 
-Dataset quality analysis
+# 🌐 Future Application Architecture
 
-Phase 2 — Segmentation
+The system can eventually be exposed through an API:
 
-YOLOv8 segmentation pipeline
+```text
+                 Client / Camera
+                        │
+                        ▼
+                 FastAPI Backend
+                        │
+                        ▼
+              BeanVisionAI Pipeline
+                        │
+          ┌─────────────┼─────────────┐
+          ▼             ▼             ▼
+       YOLOv8         DINOv2         MLP
+          │             │             │
+          └─────────────┼─────────────┘
+                        │
+                        ▼
+                  Quality Result
+                        │
+                        ▼
+                 Web Dashboard
+```
 
-Bean mask generation
+---
 
-Individual bean extraction
+# 🛣️ Roadmap
 
-Hyperparameter optimization
+## Phase 1 — Foundation
 
-Segmentation benchmarking
+* [x] Repository setup
+* [x] Project structure
+* [x] Dataset preparation
+* [x] Seven-class definition
+* [x] Initial segmentation pipeline
 
-Phase 3 — Feature Extraction
+## Phase 2 — Segmentation
 
-DINOv2 integration
+* [x] YOLOv8 integration
+* [x] Instance segmentation
+* [x] Mask extraction
+* [x] Individual bean extraction
+* [x] Initial model evaluation
+* [ ] Further hyperparameter optimization
+* [ ] Dataset expansion
 
-Bean feature extraction
+## Phase 3 — Feature Extraction
 
-768-dimensional feature generation
+* [x] DINOv2 integration
+* [x] Feature extraction pipeline
+* [x] 768-D feature generation
+* [x] Train/validation/test feature organization
+* [ ] Feature visualization
+* [ ] Feature-space analysis
 
-Feature analysis
+## Phase 4 — Classification
 
-Feature visualization
+* [x] MLP architecture
+* [x] 7-class classification pipeline
+* [ ] Hyperparameter tuning
+* [ ] Cross-validation
+* [ ] Detailed error analysis
+* [ ] Final benchmark
 
-Phase 4 — Classification
+## Phase 5 — Deployment
 
-MLP classifier architecture
+* [x] ONNX export exploration
+* [ ] Optimized inference
+* [ ] FastAPI backend
+* [ ] Streamlit dashboard
+* [ ] Docker container
+* [ ] REST API
 
-7-class classification
+## Phase 6 — Edge AI
 
-Hyperparameter optimization
+* [ ] Edge inference optimization
+* [ ] Real-time camera pipeline
+* [ ] NVIDIA Jetson deployment
+* [ ] Raspberry Pi deployment
+* [ ] Industrial edge computer integration
 
-Cross-validation
+## Phase 7 — Industrial Automation
 
-Detailed error analysis
+* [ ] Conveyor belt integration
+* [ ] Real-time bean detection
+* [ ] Automated bean sorting
+* [ ] Batch-level quality scoring
+* [ ] Production monitoring
 
-Phase 5 — Deployment
+---
 
-ONNX export exploration
+# 🌱 Future Scope
 
-Optimized inference
+BeanVisionAI can evolve from a research prototype into an intelligent coffee inspection platform.
 
-FastAPI backend
+### 📷 Real-Time Inspection
 
-Streamlit dashboard
+Use cameras to continuously analyze beans on a conveyor belt.
 
-Docker containerization
+### 🏭 Automated Sorting
 
-Phase 6 — Edge & Industrial AI
+Integrate the AI predictions with actuators or robotic mechanisms to separate beans based on quality.
 
-Edge inference
+### ⚡ Edge AI
 
-Real-time camera pipeline
+Deploy optimized inference on:
 
-Jetson deployment
+* NVIDIA Jetson devices
+* Raspberry Pi
+* Embedded AI computers
+* Industrial edge systems
 
-Raspberry Pi deployment
+### ☁️ Cloud Analytics
 
-Conveyor belt inspection
+A cloud-connected version could provide:
 
-Automated bean sorting
+* Batch history
+* Quality trends
+* Model monitoring
+* Dataset management
+* Remote analytics
+* Production statistics
 
-🌱 Future Scope
+### 📊 Automated Quality Reports
 
-BeanVisionAI can be expanded into a complete intelligent coffee inspection platform.
+Generate reports containing:
 
-Real-Time Inspection
+* Total beans inspected
+* Class distribution
+* Defect percentage
+* Good bean percentage
+* Batch quality score
+* Model confidence
+* Historical comparisons
 
-Integrate cameras to classify coffee beans continuously in real time.
+---
 
-Industrial Sorting
+# 🔬 Research Potential
 
-Connect the AI system with mechanical sorting mechanisms to automatically separate defective beans.
+BeanVisionAI can also serve as a research platform for exploring:
 
-Edge AI
+* Agricultural computer vision
+* Coffee bean defect detection
+* Instance segmentation
+* Self-supervised learning
+* Vision Transformers
+* Feature representation learning
+* Transfer learning
+* Few-shot classification
+* Edge AI
+* Intelligent agricultural automation
 
-Deploy optimized models on:
+Potential future research directions include comparing:
 
-NVIDIA Jetson
-Raspberry Pi
-Industrial edge computers
-Other supported embedded platforms
-Cloud Integration
+```text
+DINOv2
+   │
+   ├── MLP
+   │
+   ├── SVM
+   │
+   ├── Random Forest
+   │
+   └── Other Classifiers
+```
 
-Future versions can provide:
+and evaluating which feature/classifier combination provides the best accuracy, robustness, and inference efficiency.
 
-Centralized inference
-Quality monitoring
-Historical analytics
-Dataset management
-Model management
-Intelligent Reporting
+---
 
-Generate automated reports containing:
+# 🔐 Reproducibility
 
-Total beans analyzed
-Class distribution
-Defect percentage
-Quality statistics
-Model confidence
-Batch-level analysis
-🧪 Research Opportunities
+For reproducible experiments, record:
 
-BeanVisionAI can serve as a foundation for further research into:
+* Dataset version
+* Dataset split
+* Class mapping
+* Model checkpoint
+* Training epochs
+* Batch size
+* Image size
+* Learning rate
+* Optimizer
+* Random seed
+* Hardware environment
+* Python version
+* PyTorch version
 
-Agricultural computer vision
-Coffee bean defect classification
-Vision Transformers
-Self-supervised learning
-Instance segmentation
-Feature representation learning
-Edge AI
-Automated agricultural inspection
-Intelligent sorting systems
-🤝 Contributing
+This helps ensure that experimental results can be independently reproduced.
 
-Contributions are welcome.
+---
 
-To contribute:
+# 🤝 Contributing
 
-1. Fork the repository
-git fork https://github.com/yourusername/BeanVisionAI
-2. Clone your fork
-git clone https://github.com/yourusername/BeanVisionAI.git
-3. Create a branch
+Contributions are welcome!
+
+If you'd like to contribute:
+
+### 1. Fork the repository
+
+### 2. Clone your fork
+
+```bash
+git clone https://github.com/YOUR_USERNAME/BeanVisionAI.git
+cd BeanVisionAI
+```
+
+### 3. Create a feature branch
+
+```bash
 git checkout -b feature/your-feature
-4. Make your changes
+```
 
-Implement and test your contribution.
+### 4. Make your changes
 
-5. Commit your changes
+Implement your feature and test it thoroughly.
+
+### 5. Commit your changes
+
+```bash
 git add .
 git commit -m "Add: your feature"
-6. Push your branch
+```
+
+### 6. Push your branch
+
+```bash
 git push origin feature/your-feature
-7. Open a Pull Request
+```
 
-Please provide:
+### 7. Open a Pull Request
 
-A clear description
-Motivation for the change
-Testing information
-Screenshots where appropriate
-🐛 Issues & Feature Requests
+Please include:
 
-If you discover a bug or want to propose a feature, please use the GitHub issue templates.
+* Clear description of the change
+* Motivation
+* Testing information
+* Screenshots where applicable
+* Relevant benchmark results
 
-When reporting an issue, include:
+For major architectural changes, open an issue before implementation so the approach can be discussed.
 
-Operating system
-Python version
-GPU/CPU information
-Relevant model version
-Steps to reproduce
-Error logs
-Screenshots when applicable
-📜 License
+---
 
-BeanVisionAI is released under the MIT License.
+# 🐛 Issues & Bug Reports
 
-See the LICENSE file for the complete license terms.
+If you find a bug, create a GitHub issue and include:
 
-🙏 Acknowledgements
+* Operating system
+* Python version
+* PyTorch version
+* GPU/CPU information
+* Dataset version
+* Model checkpoint
+* Error message
+* Steps to reproduce
+* Relevant screenshots
 
-BeanVisionAI builds upon several open-source technologies and research directions, including:
+---
 
-YOLOv8
-DINOv2
-PyTorch
-OpenCV
-NumPy
-scikit-learn
-Roboflow
-ONNX
+# 📜 License
 
-The project would not be possible without the broader open-source computer vision and machine learning community.
+BeanVisionAI is released under the **MIT License**.
 
-📚 Citation
+The MIT License permits use, modification, distribution, and private or commercial use subject to the license conditions.
 
-If BeanVisionAI is used in academic research, projects, or publications, please cite the repository.
+See the [`LICENSE`](LICENSE) file for the complete license text.
 
+---
+
+# 🙏 Acknowledgements
+
+BeanVisionAI builds upon the work of the open-source machine learning and computer vision community.
+
+The project uses or builds upon technologies including:
+
+* **YOLOv8** for instance segmentation
+* **DINOv2** for visual feature extraction
+* **PyTorch** for deep learning
+* **OpenCV** for computer vision
+* **NumPy** for numerical computation
+* **scikit-learn** for evaluation
+* **Roboflow** for dataset preparation
+* **ONNX** for portable model deployment
+
+Special appreciation goes to the researchers and developers who make modern computer vision research accessible through open-source software.
+
+---
+
+# 📚 Citation
+
+If BeanVisionAI is used in academic work, research, presentations, or derivative projects, please cite the repository.
+
+```bibtex
 @software{beanvisionai,
   title  = {BeanVisionAI: AI-Powered Coffee Bean Quality Assessment System},
   author = {Nikhil},
   year   = {2026},
-  url    = {https://github.com/yourusername/BeanVisionAI}
+  url    = {https://github.com/YOUR_USERNAME/BeanVisionAI}
 }
+```
 
-Replace the repository URL with the actual GitHub repository URL before publishing.
+Replace the repository URL with the final GitHub repository address before publishing.
 
-👨‍💻 Author
+---
 
-Nikhil
-
-B.Tech Computer Science & Engineering
-Artificial Intelligence & Machine Learning
-
-GLA University, Mathura
-
-📬 Contact
-
-For questions, suggestions, research collaboration, or technical discussions, please open a GitHub issue or discussion in the repository.
-
-⭐ Support the Project
-
-If you find BeanVisionAI useful:
-
-⭐ Star the repository
-
-🍴 Fork the project
-
-🐛 Report bugs
-
-💡 Suggest features
-
-🤝 Contribute
-
-📢 Share the project
+# 👨‍💻 Author
 
 <div align="center">
 
-☕ BeanVisionAI
-Making Coffee Bean Quality Assessment Smarter with AI
+### **Nikhil**
 
-YOLOv8 × DINOv2 × MLP
+**B.Tech Computer Science & Engineering — Artificial Intelligence & Machine Learning**
 
-Built with ❤️ using Python, PyTorch, Computer Vision, and Open Source.
+**GLA University, Mathura**
 
 </div>
-.
+
+---
+
+# ⭐ Support BeanVisionAI
+
+If you find this project useful:
+
+⭐ **Star the repository**
+
+🍴 **Fork the project**
+
+🐛 **Report bugs**
+
+💡 **Suggest improvements**
+
+🤝 **Contribute**
+
+📢 **Share the project**
+
+Every contribution helps improve the project.
+
+---
+
+<div align="center">
+
+# ☕ BeanVisionAI
+
+### **Making Coffee Bean Quality Assessment Smarter with AI**
+
+**YOLOv8 × DINOv2 × MLP**
+
+*Segment → Extract → Classify → Assess*
+
+<br>
+
+**Built with Python, PyTorch, Computer Vision, and Open Source ❤️**
+
+</div>
