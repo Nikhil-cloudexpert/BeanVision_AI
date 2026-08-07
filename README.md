@@ -175,7 +175,7 @@ BeanVisionAI follows a **segmentation → feature extraction → classification*
                     ┌──────────────────────────────┐
                     │       MLP Classifier         │
                     │                              │
-                    │       768 → 512 → 256 → 7  │
+                    │       768 → 512 → 256 → 7    │
                     └──────────────┬───────────────┘
                                    │
                                    ▼
