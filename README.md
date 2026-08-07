@@ -951,3 +951,4 @@ YOLOv8 × DINOv2 × MLP
 Built with ❤️ using Python, PyTorch, Computer Vision, and Open Source.
 
 </div>
+.
