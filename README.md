@@ -1271,7 +1271,7 @@ If BeanVisionAI is used in academic work, research, presentations, or derivative
   title  = {BeanVisionAI: AI-Powered Coffee Bean Quality Assessment System},
   author = {Nikhil},
   year   = {2026},
-  url    = {https://github.com/YOUR_USERNAME/BeanVisionAI}
+  url    = {https://github.com/Nikhil-cloudexpert/BeanVisionAI}
 }
 ```
 
