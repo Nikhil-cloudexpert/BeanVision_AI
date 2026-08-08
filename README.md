@@ -15,7 +15,7 @@
 ![OpenCV](https://img.shields.io/badge/OpenCV-Computer%20Vision-5C3EE8?style=for-the-badge\&logo=opencv\&logoColor=white)
 ![ONNX](https://img.shields.io/badge/ONNX-Deployment-005CED?style=for-the-badge\&logo=onnx\&logoColor=white)
 ![GitHub](https://img.shields.io/badge/GitHub-Version%20Control-181717?style=for-the-badge\&logo=github)
-![License](https://img.shields.io/badge/License-MIT-F5C518?style=for-the-badge)
+[![License](https://img.shields.io/badge/License-MIT-F5C518?style=for-the-badge)](LICENSE)
 
 **An end-to-end computer vision and deep learning pipeline for detecting, segmenting, extracting, and classifying coffee beans.**
 
