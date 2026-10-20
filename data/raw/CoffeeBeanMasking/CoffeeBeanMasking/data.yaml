@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 7
+names: ['cut', 'good', 'husk', 'immature', 'parchment', 'partial-black', 'shell']
+
+roboflow:
+  workspace: garv-gupta
+  project: yolov8n_again
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/garv-gupta/yolov8n_again/dataset/1
