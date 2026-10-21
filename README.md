@@ -407,84 +407,53 @@ CLASS_NAMES = {
 # 🗂️ Project Structure
 
 ```text
-BeanVisionAI/
-│
-├── .github/
-│   ├── ISSUE_TEMPLATE/
-│   ├── workflows/
-│   └── PULL_REQUEST_TEMPLATE.md
-│
-├── assets/
-│   ├── images/
-│   ├── diagrams/
-│   └── demos/
+BeanVision_AI/
 │
 ├── configs/
-│   ├── data.yaml
-│   └── model_configs/
 │
 ├── data/
-│   ├── raw/
+│   ├── annotations/
 │   ├── processed/
-│   ├── train/
-│   ├── valid/
-│   └── test/
+│   └── raw/
+│       └── CoffeeBeanMasking/
+│           ├── train/
+│           │   ├── images/
+│           │   └── labels/
+│           ├── valid/
+│           │   ├── images/
+│           │   └── labels/
+│           ├── test/
+│           │   ├── images/
+│           │   └── labels/
+│           └── data.yaml
 │
 ├── docs/
-│   ├── architecture/
-│   ├── dataset/
-│   └── experiments/
-│
 ├── models/
 │   ├── checkpoints/
-│   ├── weights/
-│   ├── exported/
-│   └── onnx/
+│   ├── dinov2/
+│   ├── mlp/
+│   └── yolov8/
 │
 ├── notebooks/
-│   ├── 01_data_preparation.ipynb
-│   ├── 02_yolov8_segmentation.ipynb
-│   ├── 03_dinov2_feature_extraction.ipynb
-│   ├── 04_mlp_classification.ipynb
-│   └── 05_deployment.ipynb
-│
 ├── outputs/
-│   ├── predictions/
-│   ├── reports/
-│   ├── metrics/
-│   └── visualizations/
-│
 ├── src/
-│   ├── data/
-│   ├── preprocessing/
-│   ├── segmentation/
-│   ├── feature_extraction/
-│   ├── classification/
-│   ├── training/
-│   ├── evaluation/
-│   ├── inference/
-│   ├── deployment/
-│   ├── visualization/
-│   └── utils/
-│
 ├── tests/
 │
-├── requirements.txt
 ├── .gitignore
 ├── LICENSE
-├── CONTRIBUTING.md
-├── CODE_OF_CONDUCT.md
-└── README.md
+├── README.md
+└── requirements.txt
 ```
 
+*Note: This reflects the repository's current top-level organization and the expected dataset layout. Some directories may be empty or contain `.gitkeep` files until implementation work is added.*
 ---
 
 # 📂 Dataset
 
-The dataset is organized into training, validation, and testing subsets.
+The coffee-bean dataset was prepared by the research team during research work in Thailand. It is stored in the repository at `data/raw/CoffeeBeanMasking/` and organized into training, validation, and testing subsets. Each split contains images and their corresponding YOLO-format segmentation labels, along with `data.yaml` for dataset configuration.
 
 ```text
-dataset/
+data/raw/CoffeeBeanMasking/
 │
 ├── train/
 │   ├── images/
@@ -494,10 +463,14 @@ dataset/
 │   ├── images/
 │   └── labels/
 │
-└── test/
-    ├── images/
-    └── labels/
+├── test/
+│   ├── images/
+│   └── labels/
+│
+└── data.yaml
 ```
+
+Before making the dataset publicly downloadable, confirm that the research team and institution permit publication and add any required contributor credits.
 
 The dataset supports the seven BeanVisionAI classes:
 
@@ -555,11 +528,10 @@ YOLOv8 Segmentation Dataset
 ## 1. Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/BeanVisionAI.git
+git clone https://github.com/Nikhil-cloudexpert/BeanVision_AI.git
 cd BeanVisionAI
 ```
 
-Replace `YOUR_USERNAME` with your GitHub username.
 
 ---
 
@@ -733,17 +705,7 @@ MLP Classifier
 Class Prediction
 ```
 
-Example:
-
-```bash
-python inference.py --source image.jpg
-```
-
-Folder inference:
-
-```bash
-python inference.py --source test_images/
-```
+The commands for image and folder inference will be added here once the corresponding inference script is available and tested in the repository.
 
 ---
 
@@ -760,7 +722,7 @@ The current reported YOLOv8 experiment achieved the following metrics:
 | mAP@50    | **94.87%** |
 | mAP@50–95 | **92.62%** |
 
-These values represent the reported segmentation experiment and should be treated separately from the final DINOv2 + MLP classification results.
+These are previously reported segmentation metrics. Record the exact checkpoint and validation/test split before presenting them as final reproducible results. They should be treated separately from the DINOv2 + MLP classification results.
 
 ## DINOv2 + MLP
 
@@ -916,9 +878,7 @@ The exact values should be generated from the actual inference output rather tha
 
 # 📦 Model Export
 
-BeanVisionAI supports model export for future deployment.
-
-ONNX can provide a portable representation that can be integrated into different inference environments.
+ONNX export has been explored as a potential deployment step. A successful export does not by itself confirm that the complete YOLOv8 → DINOv2 → MLP pipeline runs on a target device.
 
 Example:
 
@@ -1176,7 +1136,7 @@ If you'd like to contribute:
 ### 2. Clone your fork
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/BeanVisionAI.git
+git clone https://github.com/Nikhil-cloudexpert/BeanVision_AI.git
 cd BeanVisionAI
 ```
 
@@ -1271,11 +1231,10 @@ If BeanVisionAI is used in academic work, research, presentations, or derivative
   title  = {BeanVisionAI: AI-Powered Coffee Bean Quality Assessment System},
   author = {Nikhil},
   year   = {2026},
-  url    = {https://github.com/Nikhil-cloudexpert/BeanVisionAI}
+  url    = {https://github.com/Nikhil-cloudexpert/BeanVision_AI}
 }
 ```
 
-Replace the repository URL with the final GitHub repository address before publishing.
 
 ---
 
