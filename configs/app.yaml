@@ -1,0 +1,29 @@
+# Paths are relative to the repository root.
+
+segmentation:
+  model: "models/yolov8/best.pt"
+  imgsz: 1024
+  conf: 0.5
+
+dinov2_dir: "models/DINOV2/dinov2-base"
+mlp_checkpoint: "models/MLP/mlp_classifier.pth"
+
+device: "cpu"  # Change to "cuda" if supported and configured
+
+low_confidence_threshold: 0.6
+max_upload_mb: 16
+max_side_px: 4096
+
+classes:
+  - cut
+  - good
+  - husk
+  - immature
+  - parchment
+  - partial-black
+  - shell
+
+reported_metrics:
+  source: "notebook 03, MLP on 215 test bean features"
+  accuracy: 0.8977
+  macro_f1: 0.89

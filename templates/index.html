@@ -1,0 +1,211 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BeanVision AI</title><style>
+:root{--bg:#0d1520;--card:#162233;--line:#243449;--tx:#e8eef5;--mu:#8fa3b8;--ac:#1fc8a4;--wa:#f0b429;--er:#ef5b5b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:15px system-ui,Segoe UI,sans-serif}
+header{padding:18px 28px;border-bottom:1px solid var(--line);display:flex;gap:24px;align-items:center;flex-wrap:wrap}
+h1{margin:0;font-size:22px}h1 span{color:var(--ac)}.sub{color:var(--mu);font-size:13px}
+nav{display:flex;gap:6px;margin-left:auto}nav button{background:none;border:0;color:var(--mu);padding:8px 14px;border-radius:8px;cursor:pointer;font-size:14px}
+nav button.on{background:var(--card);color:var(--tx)}main{max-width:1200px;margin:auto;padding:24px}
+.sec{display:none}.sec.on{display:block}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}.card h3{margin:0 0 12px;font-size:15px}
+#drop{border:2px dashed var(--line);border-radius:12px;padding:36px;text-align:center;color:var(--mu);cursor:pointer}
+#drop.hov{border-color:var(--ac)}img{max-width:100%;border-radius:8px}button.p{background:var(--ac);color:#06241d;border:0;padding:10px 18px;border-radius:8px;font-weight:600;cursor:pointer}
+button.s{background:none;border:1px solid var(--line);color:var(--tx);padding:10px 18px;border-radius:8px;cursor:pointer}button:disabled{opacity:.5}
+table{width:100%;border-collapse:collapse}td,th{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left;font-size:13px}
+.bar{display:flex;align-items:center;gap:8px;margin:5px 0;font-size:13px}.bar i{display:block;height:10px;background:var(--ac);border-radius:5px}.bar b{width:110px;font-weight:400}
+.warn{color:var(--wa)}.err{color:var(--er)}.mu{color:var(--mu)}.pill{padding:3px 10px;border-radius:99px;border:1px solid var(--line);font-size:12px}
+</style></head><body>
+<header><div><h1>Bean<span>Vision</span> AI</h1><div class="sub">AI-Powered Coffee Bean Quality Inspection</div></div>
+<span class="pill" id="st">checking…</span>
+<nav><button class="on" data-t="inspect">Inspect Image</button><button data-t="analytics">Analytics</button><button data-t="models">Model Information</button><button data-t="about">About</button></nav></header>
+<main>
+<section class="sec on" id="inspect"><div class="grid">
+<div class="card"><h3>Upload</h3><div id="drop">Drop a JPG / PNG / WEBP here or click to choose</div><input id="file" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+<img id="prev" hidden style="margin-top:12px"><div style="margin-top:12px;display:flex;gap:8px"><button class="p" id="go" disabled>Analyze Image</button><button class="s" id="rst">Reset</button></div><div id="msg" class="mu" style="margin-top:10px"></div></div>
+<div class="card"><h3>Segmentation &amp; classification</h3><div id="out" class="mu">No result yet. Upload an image and run the analysis.</div></div></div>
+<div class="card" style="margin-top:16px"><h3>Per-bean results</h3><div id="tbl" class="mu">No result yet.</div></div></section>
+<section class="sec" id="analytics"><div class="grid"><div class="card"><h3>This image: class counts</h3><div id="cImg" class="mu">No result yet.</div></div>
+<div class="card"><h3>Session: class distribution</h3><div id="cSes" class="mu">No images analyzed this session.</div><p class="mu" id="sSum"></p><button class="s" id="sres">Reset session</button></div></div>
+<p class="mu">Session statistics are held in memory and reset when the server restarts.</p></section>
+<section class="sec" id="models"><div class="card"><h3>Model information</h3><div id="mi" class="mu">Loading…</div></div></section>
+<section class="sec" id="about"><div class="card"><h3>About</h3><p>YOLOv8 segments individual beans. Each bean is masked, cropped and passed to DINOv2, which produces a 768-dimensional feature vector. A trained MLP maps that vector to one of seven classes: cut, good, husk, immature, parchment, partial-black, shell.</p>
+<p class="mu">Scores are softmax confidence values, not calibrated probabilities. This is a research prototype, not a certified grading tool.</p></div></section>
+</main><script>
+const $=s=>document.querySelector(s);let file=null;
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button,.sec').forEach(e=>e.classList.remove('on'));b.classList.add('on');$('#'+b.dataset.t).classList.add('on');if(b.dataset.t=='analytics')ses();if(b.dataset.t=='models')mods()});
+function bars(el,counts){const m=Math.max(1,...Object.values(counts));el.replaceChildren();Object.entries(counts).forEach(([k,v])=>{const d=document.createElement('div');d.className='bar';const b=document.createElement('b');b.textContent=k;const i=document.createElement('i');i.style.width=(v/m*60)+'%';const n=document.createElement('span');n.textContent=v;d.append(b,i,n);el.append(d)})}
+async function hl(){try{const h=await (await fetch('/api/health')).json();const s=$('#st');s.textContent=h.models=='ready'?'Local inference ready ('+h.device+')':h.models=='error'?'Model error':'Loading models…';s.className='pill '+(h.models=='error'?'err':'');if(h.models=='error')$('#msg').textContent=h.error;if(h.models=='loading')setTimeout(hl,2000)}catch(e){$('#st').textContent='Server unreachable'}}hl();
+function pick(f){if(!f)return;file=f;$('#prev').src=URL.createObjectURL(f);$('#prev').hidden=false;$('#go').disabled=false;$('#msg').textContent=f.name}
+$('#drop').onclick=()=>$('#file').click();$('#file').onchange=e=>pick(e.target.files[0]);
+$('#drop').ondragover=e=>{e.preventDefault();$('#drop').classList.add('hov')};$('#drop').ondragleave=()=>$('#drop').classList.remove('hov');
+$('#drop').ondrop=e=>{e.preventDefault();$('#drop').classList.remove('hov');pick(e.dataTransfer.files[0])};
+$('#rst').onclick=()=>{file=null;$('#prev').hidden=true;$('#go').disabled=true;$('#msg').textContent='';$('#out').textContent='No result yet. Upload an image and run the analysis.';$('#tbl').textContent='No result yet.'};
+$('#go').onclick = async () => {
+  if (!file) {
+    $('#msg').textContent = 'Please select an image first.';
+    return;
+  }
+
+  $('#go').disabled = true;
+  $('#msg').className = 'mu';
+  $('#msg').textContent = 'Analyzing image...';
+
+  const fd = new FormData();
+  fd.append('image', file);
+
+  try {
+    const response = await fetch('/api/predict', {
+      method: 'POST',
+      body: fd
+    });
+    const j = await response.json();
+
+    if (!j.success) {
+      $('#msg').className = 'err';
+      $('#msg').textContent = j.error || 'Analysis failed.';
+      return;
+    }
+
+    $('#msg').textContent =
+      j.summary.beans_detected + ' beans in ' +
+      j.inference.duration_ms + ' ms on ' + j.inference.device;
+
+    $('#out').replaceChildren();
+
+    // Annotated detection image
+    const im = document.createElement('img');
+    im.src = j.annotated_image;
+    im.alt = 'Annotated coffee bean detection results';
+    $('#out').append(im);
+
+    // Coffee bean quality assessment
+    const q = j.quality_assessment;
+    const qualityCard = document.createElement('section');
+    qualityCard.style.cssText =
+      'margin-top:24px;padding:24px;border:1px solid #dce5e1;' +
+      'border-radius:16px;background:#fff;color:#172b24;';
+
+    const heading = document.createElement('h2');
+    heading.textContent = 'Coffee Bean Quality Assessment';
+    qualityCard.append(heading);
+
+    if (!q || !q.available) {
+      const message = document.createElement('p');
+      message.textContent = q?.message || 'Quality assessment is unavailable.';
+      qualityCard.append(message);
+    } else {
+      const score = document.createElement('div');
+      score.style.cssText = 'font-size:32px;font-weight:700;margin:16px 0 4px;';
+      score.textContent = `${q.quality_score}/100`;
+      qualityCard.append(score);
+
+      const category = document.createElement('p');
+      category.style.cssText = 'font-size:18px;font-weight:600;margin-top:4px;';
+      category.textContent = q.quality_category;
+      qualityCard.append(category);
+
+      const stats = document.createElement('p');
+      stats.textContent =
+        `Beans classified: ${q.classified_beans} | ` +
+        `Good: ${q.good_beans} (${q.good_percentage}%) | ` +
+        `Predicted defects: ${q.defective_beans} (${q.defect_percentage}%)`;
+      qualityCard.append(stats);
+
+      const defectHeading = document.createElement('h3');
+      defectHeading.textContent = 'Defect Breakdown';
+      qualityCard.append(defectHeading);
+
+      const defectTable = document.createElement('table');
+      defectTable.style.color = '#172b24';
+      defectTable.innerHTML =
+        '<tr><th>Defect category</th><th>Count</th><th>Percentage</th></tr>';
+
+      const defects = Object.entries(q.defect_distribution || {});
+      if (defects.length === 0) {
+        const row = defectTable.insertRow();
+        row.insertCell().textContent = 'No defect categories';
+        row.insertCell().textContent = '0';
+        row.insertCell().textContent = '0%';
+      } else {
+        defects.forEach(([name, details]) => {
+          const row = defectTable.insertRow();
+          row.insertCell().textContent = name;
+          row.insertCell().textContent = details.count;
+          row.insertCell().textContent = `${details.percentage}%`;
+        });
+      }
+      qualityCard.append(defectTable);
+
+      const review = document.createElement('p');
+      review.textContent =
+        `Low-confidence predictions requiring review: ${q.low_confidence_count}`;
+      qualityCard.append(review);
+
+      const recommendationHeading = document.createElement('h3');
+      recommendationHeading.textContent = 'Recommendations';
+      qualityCard.append(recommendationHeading);
+
+      const recommendations = document.createElement('ul');
+      (q.recommendations || []).forEach(text => {
+        const item = document.createElement('li');
+        item.textContent = text;
+        item.style.marginBottom = '8px';
+        recommendations.append(item);
+      });
+      qualityCard.append(recommendations);
+
+      const note = document.createElement('p');
+      note.style.cssText =
+        'font-size:12px;color:#64756d;margin-top:18px;line-height:1.6;';
+      note.textContent =
+        'This is an experimental visual quality score based on model ' +
+        'predictions and provisional defect penalties. It is not an ' +
+        'official or validated coffee grade.';
+      qualityCard.append(note);
+    }
+
+    $('#out').append(qualityCard);
+
+    // Per-bean detection results
+    if (!j.detections || j.detections.length === 0) {
+      $('#tbl').textContent = 'Valid image, but no beans were detected.';
+    } else {
+      const table = document.createElement('table');
+      table.innerHTML =
+        '<tr><th>#</th><th>Class</th><th>Confidence</th>' +
+        '<th>Detector label</th><th>Box</th></tr>';
+
+      j.detections.forEach(d => {
+        const row = table.insertRow();
+        [
+          d.id,
+          d.predicted_class,
+          (d.score * 100).toFixed(1) + '%' +
+            (d.low_confidence ? ' - Low confidence' : ''),
+          d.detector_label,
+          (d.bbox || []).join(', ')
+        ].forEach(value => {
+          row.insertCell().textContent = value;
+        });
+        if (d.low_confidence) row.className = 'warn';
+      });
+
+      $('#tbl').replaceChildren(table);
+    }
+
+    // Class counts for the current image
+    bars($('#cImg'), j.class_counts || {});
+
+  } catch (error) {
+    console.error('Prediction request failed:', error);
+    $('#msg').className = 'err';
+    $('#msg').textContent = 'Request failed. Please try again.';
+  } finally {
+    $('#go').disabled = false;
+  }
+};
+async function ses(){const s=await (await fetch('/api/session/summary')).json();if(s.images)bars($('#cSes'),s.class_counts);const a=s.times_ms.length?Math.round(s.times_ms.reduce((x,y)=>x+y)/s.times_ms.length):null;$('#sSum').textContent=`Images: ${s.images} · failed: ${s.failed} · beans: ${s.beans}`+(a?` · mean inference ${a} ms`:'')}
+$('#sres').onclick=async()=>{await fetch('/api/session/reset',{method:'POST'});$('#cSes').textContent='No images analyzed this session.';ses()};
+async function mods(){const m=await (await fetch('/api/models')).json();const r=[['Segmentation model',m.segmentation],['Input size',m.imgsz+' px (configured)'],['Confidence threshold',m.conf],['Feature extractor',m.feature_extractor],['Classifier',m.classifier],['Classes',m.classes.join(', ')],['Device',m.device+' (configured)'],['Status',m.status],['Reported MLP test accuracy',(m.reported_metrics.accuracy*100).toFixed(2)+'% — '+m.reported_metrics.source+' (not live)']];
+const t=document.createElement('table');r.forEach(([a,b])=>{const tr=t.insertRow();tr.insertCell().textContent=a;tr.insertCell().textContent=b});$('#mi').replaceChildren(t)}
+</script></body></html>

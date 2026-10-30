@@ -2,7 +2,7 @@ import io, logging, threading
 import cv2, numpy as np
 from flask import Flask, jsonify, render_template, request
 from PIL import Image
-from pipeline import ROOT, Pipeline, load_config
+from src.pipeline import ROOT, Pipeline, load_config
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 log = logging.getLogger("beanvision")
