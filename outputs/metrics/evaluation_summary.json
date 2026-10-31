@@ -1,0 +1,20 @@
+{
+    "evaluation": "MLP classifier on saved DINOv2 test features",
+    "test_samples": 215,
+    "feature_dimensions": 768,
+    "accuracy": 0.8976744186046511,
+    "macro_precision": 0.8879088653282201,
+    "macro_recall": 0.9004824846339573,
+    "macro_f1": 0.8910832233837676,
+    "weighted_f1": 0.8964813566825246,
+    "device": "cpu",
+    "class_names": [
+        "cut",
+        "good",
+        "husk",
+        "immature",
+        "parchment",
+        "partial-black",
+        "shell"
+    ]
+}

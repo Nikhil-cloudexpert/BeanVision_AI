@@ -1,0 +1,23 @@
+BeanVision AI - MLP Test Evaluation
+==========================================
+Test samples: 215
+Accuracy: 0.8977
+Macro precision: 0.8879
+Macro recall: 0.9005
+Macro F1: 0.8911
+Weighted F1: 0.8965
+
+Classification report:
+               precision    recall  f1-score   support
+
+          cut       0.85      0.96      0.90        23
+         good       0.94      1.00      0.97        58
+         husk       0.98      0.80      0.88        54
+     immature       0.90      0.82      0.86        11
+    parchment       0.92      1.00      0.96        11
+partial-black       0.83      0.81      0.82        31
+        shell       0.81      0.93      0.86        27
+
+     accuracy                           0.90       215
+    macro avg       0.89      0.90      0.89       215
+ weighted avg       0.90      0.90      0.90       215
