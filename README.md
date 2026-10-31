@@ -32,9 +32,7 @@ A modular computer-vision pipeline combining **YOLOv8 instance segmentation**, *
 
 ## 📖 Overview
 
-Coffee bean inspection is often performed through manual visual examination. That process can be time-consuming and subjective, and it may be difficult to scale consistently.
-
-**BeanVisionAI** explores a multi-stage deep-learning workflow for identifying individual beans and classifying them into seven predefined categories.
+Coffee bean inspection is often performed through manual visual examination. That process can be time-consuming and subjective, and it may be difficult to scale consistently. **BeanVisionAI** explores a multi-stage deep-learning workflow for identifying individual beans and classifying them into seven predefined categories.
 
 Instead of using a single model for the entire task, the project separates the workflow into distinct stages:
 
@@ -44,7 +42,7 @@ Instead of using a single model for the entire task, the project separates the w
 4. A custom **Multi-Layer Perceptron (MLP)** predicts one of seven classes from the embedding.
 5. Evaluation utilities generate classification metrics, prediction tables, and confusion-matrix visualizations.
 
-> **Project status:** The segmentation and feature-based classification workflow has been developed, and an MLP test-set evaluation has been run. ONNX export has been explored. Real-time edge-device deployment and automated physical sorting remain future work.
+> **Project status:** The segmentation and feature-based classification workflow has been developed and an MLP test-set evaluation has been run. ONNX export has been explored. Real-time edge-device deployment and automated physical sorting remain future work.
 
 ## ✨ Highlights
 
@@ -52,11 +50,10 @@ Instead of using a single model for the entire task, the project separates the w
 - 🧬 DINOv2 feature extraction using 768-dimensional embeddings
 - 🧠 Custom MLP classifier with batch normalization, ReLU, and dropout
 - 🏷️ Seven-class prediction
-- 📊 Classification reports, confusion matrices, and per-sample predictions
+- 📊 Classification report, confusion matrix, and per-sample predictions
 - 🧩 Modular pipeline with separate segmentation and classification stages
 - 📦 ONNX export exploration for portability
-- 🔬 Model evaluation and error-analysis capabilities
-- 📈 A foundation for future edge-device deployment
+- 🔬 Designed to support further experimentation and error analysis
 
 ## 🧭 Pipeline Architecture
 
@@ -71,6 +68,15 @@ flowchart TD
     G --> H["MLP classifier<br/>768 → 512 → 256 → 7"]
     H --> I["Seven-class prediction"]
     I --> J["Quality summary / report"]
+
+    classDef input fill:#f7e7c6,stroke:#9a6b22,color:#2b2112,stroke-width:1.5px;
+    classDef vision fill:#dbeafe,stroke:#2563eb,color:#172554,stroke-width:1.5px;
+    classDef model fill:#ede9fe,stroke:#7c3aed,color:#2e1065,stroke-width:1.5px;
+    classDef output fill:#dcfce7,stroke:#16a34a,color:#052e16,stroke-width:1.5px;
+    class A input;
+    class B,C,D,E vision;
+    class F,G,H model;
+    class I,J output;
 ```
 
 ### Model components
@@ -99,9 +105,7 @@ flowchart TD
     J --> K["Predicted class"]
 ```
 
-The classifier uses a `768 → 512 → 256 → 7` layout, with batch normalization, ReLU activations, and dropout between the linear layers.
-
-The evaluation script loads the saved classifier checkpoint rather than retraining the model.
+The classifier uses a `768 → 512 → 256 → 7` layout, with batch normalization, ReLU activations, and dropout between the linear layers. The saved checkpoint is loaded for evaluation rather than retraining during the evaluation script.
 
 ## 🏷️ Supported Classes
 
@@ -117,7 +121,7 @@ The classification pipeline uses the following seven labels:
 | `5` | `partial-black` | Partially black bean |
 | `6` | `shell` | Shell |
 
-The class mapping used by the evaluation script is:
+The mapping used by the evaluation script is:
 
 ```python
 CLASS_NAMES = {
@@ -131,28 +135,26 @@ CLASS_NAMES = {
 }
 ```
 
-Class labels are reproduced as used in the project. Their formal definitions should follow the dataset annotation guide when preparing a research report.
-
----
+Class labels are reproduced as used in the project; their definitions should be aligned with the dataset annotation guide when preparing a formal research report.
 
 ## 📊 Results
 
-### 1. DINOv2 + MLP Classification
+### DINOv2 + MLP classification
 
-The MLP was evaluated on the saved test feature matrix in `data/processed/test_data.npz`.
+The MLP was evaluated on the saved test feature matrix in `data/processed/test_data.npz`. That file contains **215 samples**, each represented by **768 features**, with ground-truth labels. The evaluation script loaded `models/MLP/mlp_classifier.pth` and produced the following results.
 
-The test data contains **215 samples**, each represented by **768 features**, with corresponding ground-truth labels. The evaluation script loaded `models/MLP/mlp_classifier.pth`.
+<div align="center">
 
-#### Overall test results
-
-| Metric | Result |
-|---|---:|
-| **Test accuracy** | **89.77%** |
+| Metric | Test result |
+|:--|--:|
+| **Accuracy** | **89.77%** |
 | Macro precision | 89% |
 | Macro recall | 90% |
 | Macro F1-score | 89% |
 | Weighted F1-score | 90% |
-| Number of test samples | 215 |
+| Test samples | 215 |
+
+</div>
 
 #### Per-class classification report
 
@@ -165,40 +167,23 @@ The test data contains **215 samples**, each represented by **768 features**, wi
 | `parchment` | 0.92 | 1.00 | 0.96 | 11 |
 | `partial-black` | 0.83 | 0.81 | 0.82 | 31 |
 | `shell` | 0.81 | 0.93 | 0.86 | 27 |
+| **Accuracy** |  |  | **0.90** | **215** |
 | **Macro average** | **0.89** | **0.90** | **0.89** | **215** |
 | **Weighted average** | **0.90** | **0.90** | **0.90** | **215** |
 
-*Per-class metrics are rounded to two decimal places.*
+*Values above are from the recorded evaluation output; per-class values are rounded to two decimal places.*
 
-### 2. Confusion Matrix Analysis
+#### What these results suggest
 
-The confusion matrix helps identify which coffee bean classes are classified correctly and which categories are commonly confused.
+- **Strongest observed F1-scores:** `good` (0.97) and `parchment` (0.96). The parchment class has only 11 test examples, so the result should be interpreted cautiously.
+- **Areas to investigate:** `partial-black` has an F1-score of 0.82; `shell` has precision of 0.81; and `husk` recall is 0.80.
+- **Next analysis step:** inspect the confusion matrix and individual prediction errors to identify which classes are being confused.
 
-#### Raw confusion matrix
+> **Important evaluation note:** The **89.77% accuracy is for the MLP classifier on precomputed DINOv2 test features**. It is **not** an end-to-end accuracy measurement for the full YOLOv8 → bean extraction → DINOv2 → MLP pipeline. It also does not measure segmentation quality.
 
-![MLP Confusion Matrix](outputs/confusion_matrix/confusion_matrix.png)
+### YOLOv8 segmentation metrics
 
-#### Normalized confusion matrix
-
-![Normalized MLP Confusion Matrix](outputs/confusion_matrix/confusion_matrix_normalized.png)
-
-The raw matrix shows the number of predictions for each actual-versus-predicted class combination. The normalized matrix expresses those results proportionally, making it easier to compare class-level performance when class counts differ.
-
-#### Observations
-
-- **Good beans:** The classifier achieved a recall of 1.00 on the test samples for this class.
-- **Parchment:** The observed recall was 1.00, but this class has only 11 test samples, so the result should be interpreted cautiously.
-- **Husk:** Recall was 0.80, making missed husk predictions an area for further investigation.
-- **Partial-black:** The F1-score was 0.82, suggesting room for improvement.
-- **Shell:** Precision was 0.81, so some predictions labelled as shell may belong to other classes.
-
-These observations should be investigated further by examining individual prediction errors and the confusion matrix.
-
-> **Important evaluation note:** The **89.77% accuracy is the MLP classifier's test accuracy using precomputed DINOv2 features**. It is not an end-to-end accuracy measurement for the complete YOLOv8 → bean extraction → DINOv2 → MLP pipeline. It also does not measure segmentation quality.
-
-### 3. YOLOv8 Segmentation Metrics
-
-The following metrics were previously reported for a YOLOv8 segmentation experiment.
+Previously reported YOLOv8 experiment metrics are listed below for reference. They should not be treated as a final reproducible benchmark until the checkpoint, dataset configuration, and evaluation split are recorded and the evaluation is rerun.
 
 | Metric | Previously reported result |
 |---|---:|
@@ -207,83 +192,84 @@ The following metrics were previously reported for a YOLOv8 segmentation experim
 | mAP@50 | 94.87% |
 | mAP@50–95 | 92.62% |
 
-These values belong to the segmentation experiment and are separate from the MLP classification results.
+These values belong to the segmentation experiment and must be kept separate from the MLP classification results above.
 
-They should not be treated as a final reproducible benchmark until the checkpoint, dataset configuration, evaluation split, and evaluation procedure have been recorded and the evaluation rerun.
+### Generated evaluation artifacts
 
-### 4. Generated Evaluation Artifacts
-
-The evaluation script produces the following files:
+Running the MLP evaluation script creates the following local files:
 
 | Artifact | Path |
 |---|---|
-| Raw confusion matrix image | `outputs/confusion_matrix/confusion_matrix.png` |
-| Normalized confusion matrix image | `outputs/confusion_matrix/confusion_matrix_normalized.png` |
+| Confusion matrix | `outputs/confusion_matrix/confusion_matrix.png` |
+| Normalized confusion matrix | `outputs/confusion_matrix/confusion_matrix_normalized.png` |
 | Confusion matrix data | `outputs/confusion_matrix/confusion_matrix.csv` |
 | Classification report | `outputs/metrics/classification_report.csv` |
 | Evaluation summary | `outputs/metrics/evaluation_summary.json` |
 | Per-sample predictions | `outputs/predictions.csv` |
 | Evaluation log | `outputs/logs/mlp_evaluation.txt` |
 
-These files allow the evaluation results to be reviewed without relying exclusively on the headline accuracy.
+The confusion-matrix images are stored in the repository and can be viewed directly below.
 
----
+#### Raw confusion matrix
+
+![MLP confusion matrix](outputs/confusion_matrix/confusion_matrix.png)
+
+#### Normalized confusion matrix
+
+![Normalized MLP confusion matrix](outputs/confusion_matrix/confusion_matrix_normalized.png)
+
+The raw matrix shows the number of predictions for each actual/predicted class pair. The normalized matrix expresses the values according to the normalization used by the evaluation script; consult the figure labels and `src/evaluate_mlp.py` for the exact normalization convention.
+
+The classification report and evaluation summary are available as CSV and JSON files in `outputs/metrics/`.
 
 ## 🗂️ Repository Structure
 
-The following tree summarizes the main project areas and known model and evaluation artifacts. Optional files may differ as the repository evolves.
+The paths below summarize the main project areas and known model/evaluation artifacts. Some files or directories may differ as the repository evolves.
 
 ```text
 BeanVision_AI/
-├── assets/
-├── configs/
+├── configs/                    # Configuration files
 ├── data/
-│   ├── raw/
-│   └── processed/
+│   ├── raw/                    # Source images and segmentation annotations
+│   └── processed/              # Precomputed features and labels
 │       ├── train_data.npz
 │       ├── valid_data.npz
 │       └── test_data.npz
-├── docs/
+├── docs/                       # Documentation
 ├── models/
 │   ├── MLP/
 │   │   └── mlp_classifier.pth
-│   ├── ONNX/
+│   ├── ONNX/                   # Exported ONNX models, if retained
 │   └── yolov8/
 │       ├── best.pt
 │       └── v8_75.pt
-├── notebooks/
+├── notebooks/                  # Experiment notebooks
 ├── outputs/
 │   ├── confusion_matrix/
-│   │   ├── confusion_matrix.csv
-│   │   ├── confusion_matrix.png
-│   │   └── confusion_matrix_normalized.png
 │   ├── logs/
-│   │   └── mlp_evaluation.txt
-│   ├── metrics/
-│   │   ├── classification_report.csv
-│   │   └── evaluation_summary.json
-│   └── predictions.csv
+│   └── metrics/
 ├── src/
-│   └── evaluate_mlp.py
-├── tests/
+│   ├── app.py                  # Dashboard application (if present)
+│   ├── pipeline.py             # Pipeline logic (if present)
+│   ├── quality.py              # Quality assessment logic (if present)
+│   └── evaluate_mlp.py         # MLP test-set evaluation
+├── tests/                      # Tests
 ├── .gitignore
 ├── LICENSE
 ├── README.md
 └── requirements.txt
 ```
 
-The tree is a documentation guide, not a guarantee that every optional file is present in every checkout. Keep it synchronized with the repository as the project changes.
+The tree is a documentation guide, not a guarantee that every optional file is present in every checkout. Keep it synchronized with the repository when the structure changes.
 
 ## 📁 Dataset
 
-The project uses training, validation, and test splits for the segmentation and classification workflow.
+The dataset is organized into training, validation, and test splits for the segmentation and classification workflow. The raw segmentation dataset is expected to contain images and YOLO-format label files, with a dataset YAML file defining paths and class names. Confirm the actual dataset location and permissions before sharing or redistributing any data.
 
-The raw segmentation dataset is expected to contain images and YOLO-format label files, with a dataset YAML file defining paths and class names. Confirm the actual dataset location and permissions before sharing or redistributing data.
-
-A typical YOLO-format dataset layout is:
+Typical YOLO-format layout:
 
 ```text
-CoffeeBeanMasking/
+data/raw/CoffeeBeanMasking/
 ├── train/
 │   ├── images/
 │   └── labels/
@@ -296,9 +282,7 @@ CoffeeBeanMasking/
 └── data.yaml
 ```
 
-### Processed classification features
-
-The test data used by the evaluation script contains:
+The processed classification data currently used by the evaluation script has this structure:
 
 ```text
 test_data.npz
@@ -306,11 +290,7 @@ test_data.npz
 └── labels:   (215,),     int64
 ```
 
-Each row of the feature matrix corresponds to a bean sample represented by a 768-dimensional DINOv2 embedding.
-
-Before publishing raw images or annotations, confirm that the dataset owner, research collaborators, and institution permit redistribution and add any required attribution.
-
----
+The dataset contains the seven classes listed above. Before publishing raw images or annotations, confirm that the dataset owner, research collaborators, and institution permit redistribution and add any required attribution.
 
 ## ⚙️ Setup
 
@@ -356,18 +336,16 @@ From the repository root, run:
 python src/evaluate_mlp.py
 ```
 
-The script expects the following files to exist:
+The script expects these files to exist:
 
 ```text
 data/processed/test_data.npz
 models/MLP/mlp_classifier.pth
 ```
 
-It evaluates the saved MLP checkpoint against the test features and writes the classification report, confusion matrices, predictions, and log to `outputs/`.
+It evaluates the saved MLP checkpoint against the test features and writes its report, confusion matrices, predictions, and log to `outputs/`.
 
 > This command evaluates the classifier using precomputed features. It does not rerun YOLOv8 segmentation or DINOv2 feature extraction.
-
----
 
 ## 🏋️ Training Workflow
 
@@ -375,13 +353,16 @@ The following commands are examples. Confirm the dataset YAML path, class names,
 
 ### Stage 1 — Train YOLOv8 segmentation
 
-Example command:
-
 ```bash
-yolo task=segment mode=train model=yolov8n-seg.pt data=path/to/data.yaml epochs=100 imgsz=640 batch=16
+yolo task=segment mode=train \
+  model=yolov8n-seg.pt \
+  data=path/to/data.yaml \
+  epochs=100 \
+  imgsz=640 \
+  batch=16
 ```
 
-Replace `path/to/data.yaml` with the actual dataset configuration path.
+On Windows Command Prompt or PowerShell, enter this as a single line or use the shell's appropriate line-continuation syntax.
 
 ### Stage 2 — Extract individual beans
 
@@ -389,17 +370,11 @@ Use the trained segmentation model to predict masks and isolate bean instances. 
 
 ### Stage 3 — Extract DINOv2 features
 
-Process the isolated bean images with `facebook/dinov2-base` and save one 768-dimensional embedding per bean.
-
-Ensure that the resulting feature arrays remain aligned with their labels and their training, validation, and test splits.
+Process the isolated bean images with `facebook/dinov2-base` and save one 768-dimensional embedding per bean. The resulting feature arrays should remain aligned with their labels and train/validation/test split.
 
 ### Stage 4 — Train the MLP
 
-Train the classifier on the training embeddings, select settings using validation data, and reserve the test set for final evaluation.
-
-Save the resulting checkpoint and record the experiment configuration for reproducibility.
-
----
+Train the classifier on the training embeddings, select settings using validation data, and reserve the test set for final evaluation. Save the resulting checkpoint and record the experiment configuration.
 
 ## 🔎 Inference
 
@@ -407,21 +382,17 @@ The intended full inference path is:
 
 ```mermaid
 flowchart LR
-    A["Input image"] --> B["YOLOv8 segmentation"]
+    A["Image"] --> B["YOLOv8"]
     B --> C["Bean masks"]
-    C --> D["Bean extraction"]
+    C --> D["Bean crops"]
     D --> E["DINOv2"]
-    E --> F["768-dimensional features"]
-    F --> G["MLP classifier"]
+    E --> F["768-D features"]
+    F --> G["MLP"]
     G --> H["Class predictions"]
     H --> I["Quality summary"]
 ```
 
-The exact image- and folder-inference commands depend on the inference entry point available in the current checkout.
-
-The `evaluate_mlp.py` script evaluates saved features and labels; it should not be treated as an end-to-end image-inference script.
-
----
+The exact image- and folder-inference commands depend on the inference entry point available in the current checkout. Avoid assuming that `evaluate_mlp.py` performs end-to-end image inference; it evaluates saved features and labels.
 
 ## 📦 Model Export and Deployment
 
@@ -435,14 +406,11 @@ Potential deployment targets include:
 - Raspberry Pi or other edge hardware, after compatibility and performance testing
 - Industrial camera and sorting integrations as longer-term work
 
-The complete pipeline may require separate compatibility, latency, memory, and accuracy testing for each target.
-
-Edge deployment, live camera processing, and automated physical sorting remain future work until they have been implemented and validated.
-
----
+The complete pipeline may require separate compatibility, latency, memory, and accuracy testing for each target. Edge deployment, live camera processing, and automated physical sorting are roadmap items rather than claims of completed functionality.
 
 ## 🛣️ Roadmap
 
+- [x] Repository and project structure
 - [x] Seven-class label mapping
 - [x] YOLOv8 segmentation workflow
 - [x] Individual bean mask/extraction workflow
@@ -450,9 +418,9 @@ Edge deployment, live camera processing, and automated physical sorting remain f
 - [x] 768-dimensional feature dataset
 - [x] MLP seven-class classifier
 - [x] MLP test-set evaluation and report generation
-- [x] Confusion matrix generation
 - [x] ONNX export exploration
 - [ ] Rerun and document reproducible YOLOv8 segmentation evaluation
+- [x] Commit raw and normalized MLP confusion matrices to the repository
 - [ ] Analyze the most frequent class confusions
 - [ ] Expand and balance the dataset where appropriate
 - [ ] Tune classifier hyperparameters and evaluate robustness
@@ -466,13 +434,13 @@ Edge deployment, live camera processing, and automated physical sorting remain f
 
 Potential extensions include:
 
-- **More robust evaluation:** repeatable test protocols, cross-validation, and error analysis.
-- **Feature comparison:** compare DINOv2 embeddings with alternative feature extractors.
-- **Classifier comparison:** evaluate MLP, SVM, and Random Forest models on the same feature splits.
-- **Dataset improvement:** review class imbalance, annotation consistency, and difficult examples.
-- **Deployment optimization:** profile model latency, memory, and throughput on target hardware.
-- **Quality analytics:** track class distributions and batch-level quality summaries.
-- **Industrial integration:** investigate camera input and sorting hardware after model reliability is validated.
+- **More robust evaluation:** repeatable test protocols, cross-validation, and error analysis
+- **Feature comparison:** compare DINOv2 embeddings with alternative feature extractors
+- **Classifier comparison:** evaluate MLP, SVM, and Random Forest models on the same feature splits
+- **Dataset improvement:** review class imbalance, annotation consistency, and difficult examples
+- **Deployment optimization:** profile model latency, memory, and throughput on target hardware
+- **Quality analytics:** track class distributions and batch-level quality summaries
+- **Industrial integration:** investigate camera input and sorting hardware after model reliability is validated
 
 ## 🔁 Reproducibility
 
@@ -500,9 +468,7 @@ Contributions, bug reports, and suggestions are welcome.
 4. Commit your changes: `git commit -m "Describe your change"`
 5. Push the branch and open a pull request.
 
-For substantial changes, include the motivation, implementation details, testing performed, and relevant screenshots or benchmark results.
-
-Do not commit private data, credentials, large generated files, or model artifacts unless they are intended to be versioned.
+For substantial changes, include the motivation, implementation details, testing performed, and relevant screenshots or benchmark results. Do not commit private data, credentials, large generated files, or model artifacts unless they are intended to be versioned.
 
 ## 🐛 Issues
 
@@ -519,9 +485,7 @@ When reporting a problem, include relevant details where possible:
 
 ## 📜 License
 
-This project declares the **MIT License**. See [`LICENSE`](LICENSE) for the complete license text.
-
-Ensure that the license file is present and matches the license you intend to use.
+This project declares the **MIT License**. See [`LICENSE`](LICENSE) for the complete license text. Make sure the license file is present and matches the license you intend to use.
 
 ## 🙏 Acknowledgements
 
