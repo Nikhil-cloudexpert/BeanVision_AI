@@ -1,5 +1,11 @@
+# Python cache
 __pycache__/
 *.py[cod]
-.venv/
+
+# Virtual environments
 venv/
-.env
+.venv/
+
+# Temporary files
+*.log
+.DS_Store
